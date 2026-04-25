@@ -58,24 +58,22 @@ export const ProductVisual: React.FC<Props> = ({
   );
 };
 
-export const BrandMark: React.FC<{ className?: string }> = ({ className = 'w-8 h-8' }) => (
-  <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" className={className} aria-hidden="true" focusable="false">
-    <defs>
-      <linearGradient id="kityBrandGrad" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stopColor="#8B83FF" />
-        <stop offset="100%" stopColor="#00D9FF" />
-      </linearGradient>
-    </defs>
-    <rect x="2" y="2" width="36" height="36" rx="10" fill="url(#kityBrandGrad)" />
-    <path
-      d="M14 11v18M14 20l9-9M14 20l9 9"
-      stroke="#0F0F23"
-      strokeWidth="2.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      fill="none"
+export const BrandMark: React.FC<{ className?: string; rounded?: boolean }> = ({
+  className = 'w-8 h-8',
+  rounded = true,
+}) => (
+  <span
+    className={`inline-block overflow-hidden bg-black ring-1 ring-white/10 shadow-[0_4px_18px_-4px_rgba(0,217,255,0.35)] ${
+      rounded ? 'rounded-xl' : ''
+    } ${className}`}
+  >
+    <img
+      src="/kity-logo.jpg"
+      alt="KITY GAMER"
+      className="w-full h-full object-cover select-none"
+      draggable={false}
     />
-  </svg>
+  </span>
 );
 
 export default ProductVisual;
