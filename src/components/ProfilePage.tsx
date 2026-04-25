@@ -3,6 +3,7 @@ import { useApp } from '../store/AppContext';
 import { getPayments, addTrialLog, getTrialByCode, getFileById, addFeedback, getNotificationsFor, markNotifRead, markAllNotifsRead, Notification } from '../store/db';
 import { formatDate } from '../store/helpers';
 import { Icon, IconName } from './Icon';
+import { KityGamerBadge } from './ProductVisual';
 
 type Tab = 'profile' | 'notifs' | 'trial' | 'feedback' | 'history';
 const TABS: { id: Tab; label: string; icon: IconName }[] = [
@@ -174,7 +175,10 @@ const ProfilePage: React.FC = () => {
           </dl>
           <div className="mt-4 p-3 rounded-xl bg-primary/[0.06] border border-primary/15 inline-flex items-start gap-2 w-full">
             <Icon name="info" className="w-4 h-4 text-primary-light flex-shrink-0 mt-0.5" />
-            <p className="text-text-secondary text-xs">Need help? Contact <span className="text-primary-light font-medium">@KITYGAMER</span></p>
+            <p className="text-text-secondary text-xs inline-flex items-center gap-1.5 flex-wrap">
+              <span>Need help? Contact</span>
+              <KityGamerBadge />
+            </p>
           </div>
         </div>
       )}

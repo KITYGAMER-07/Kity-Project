@@ -2,7 +2,7 @@ import React from 'react';
 import { useApp } from '../store/AppContext';
 import { getFiles, getPrices, getSetting } from '../store/db';
 import { Icon, IconName } from './Icon';
-import { BrandMark } from './ProductVisual';
+import { BrandMark, KityGamerBadge } from './ProductVisual';
 
 interface Feature {
   icon: IconName;
@@ -57,12 +57,14 @@ const HomePage: React.FC = () => {
         <div className="absolute inset-0 opacity-[0.07] [background-image:linear-gradient(to_right,rgba(255,255,255,0.7)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.7)_1px,transparent_1px)] [background-size:32px_32px]" />
 
         <div className="relative px-5 sm:px-12 py-8 sm:py-14 text-center">
-          <div className="inline-flex items-center justify-center mb-4">
+          <div className="flex justify-center mb-4">
             <BrandMark className="w-14 h-14 sm:w-20 sm:h-20" />
           </div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-text-secondary text-[10px] sm:text-xs mb-3">
-            <Icon name="sparkles" className="w-3 h-3 text-accent" />
-            Premium digital store
+          <div className="flex justify-center mb-3">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-text-secondary text-[10px] sm:text-xs">
+              <Icon name="sparkles" className="w-3 h-3 text-accent" />
+              Premium digital store
+            </span>
           </div>
           <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-3 leading-tight">
             <span className="bg-gradient-to-r from-primary-light via-white to-accent bg-clip-text text-transparent">
@@ -72,8 +74,9 @@ const HomePage: React.FC = () => {
           <p className="text-text-secondary text-sm sm:text-lg max-w-xl mx-auto">
             Premium game keys & digital products, delivered instantly after admin approval.
           </p>
-          <p className="text-text-muted text-[11px] sm:text-xs mt-1.5 mb-6 inline-flex items-center gap-1.5">
-            Crafted by <span className="text-primary-light font-medium">@KITYGAMER</span>
+          <p className="text-text-muted text-[11px] sm:text-xs mt-2 mb-6 inline-flex items-center gap-1.5 flex-wrap justify-center">
+            <span>Crafted by</span>
+            <KityGamerBadge />
           </p>
 
           <div className="flex flex-col sm:flex-row gap-2.5 justify-center items-stretch sm:items-center">
@@ -170,14 +173,14 @@ const HomePage: React.FC = () => {
 
       {/* Footer */}
       <footer className="border-t border-border pt-4 sm:pt-5 text-center">
-        <div className="inline-flex items-center gap-2 text-text-muted text-xs sm:text-sm">
+        <div className="inline-flex items-center gap-2 text-text-muted text-xs sm:text-sm flex-wrap justify-center">
           <BrandMark className="w-4 h-4" />
           <span>KITY DIGITAL STORE</span>
           <span className="text-border">•</span>
-          <span>@KITYGAMER</span>
+          <KityGamerBadge />
         </div>
         {upi && (
-          <p className="text-text-muted text-[10px] sm:text-xs mt-1.5 inline-flex items-center gap-1.5">
+          <p className="text-text-muted text-[10px] sm:text-xs mt-2 inline-flex items-center gap-1.5">
             <Icon name="wallet" className="w-3 h-3" /> UPI: <span className="font-mono">{upi}</span>
           </p>
         )}

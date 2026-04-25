@@ -10,7 +10,7 @@ import {
 } from '../store/db';
 import { getPricesByFileId, getStockCount, formatDate, generateCode } from '../store/helpers';
 import { Icon, IconName } from './Icon';
-import { ProductVisual, getProductInitials } from './ProductVisual';
+import { ProductVisual, getProductInitials, KityGamerBadge } from './ProductVisual';
 
 interface TabDef {
   id: string;
@@ -983,7 +983,10 @@ const SettingsTab: React.FC = () => {
         </span>
         <div>
           <p className="text-text-secondary text-sm font-medium">KITY Digital Store v1.0</p>
-          <p className="text-text-muted text-xs">Crafted by @KITYGAMER</p>
+          <p className="text-text-muted text-xs inline-flex items-center gap-1.5 flex-wrap justify-center mt-1">
+            <span>Crafted by</span>
+            <KityGamerBadge />
+          </p>
         </div>
       </div>
     </div>

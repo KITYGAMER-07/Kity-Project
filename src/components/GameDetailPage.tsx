@@ -4,7 +4,7 @@ import { getFileById, getPricesByFileId, getStockCount } from '../store/helpers'
 import { getSetting, addPayment, updatePayment, getPaymentById, compressImage, addAdminNotification } from '../store/db';
 import { QRCodeSVG } from 'qrcode.react';
 import { Icon } from './Icon';
-import { ProductVisual } from './ProductVisual';
+import { ProductVisual, KityGamerBadge } from './ProductVisual';
 
 interface Props { fileId: number; }
 
@@ -193,7 +193,10 @@ const GameDetailPage: React.FC<Props> = ({ fileId }) => {
           <div className="status-badge status-warning mb-3">
             <Icon name="alert" className="w-3 h-3" /> {rejectReason}
           </div>
-          <p className="text-text-muted text-xs mb-5">Need help? Contact @KITYGAMER</p>
+          <p className="text-text-muted text-xs mb-5 inline-flex items-center gap-1.5 flex-wrap justify-center">
+            <span>Need help? Contact</span>
+            <KityGamerBadge />
+          </p>
           <button
             onClick={() => { refreshData(); setStep('plans'); }}
             className="btn-primary px-6 py-2.5 rounded-xl text-sm"

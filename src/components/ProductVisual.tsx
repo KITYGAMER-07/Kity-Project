@@ -76,4 +76,40 @@ export const BrandMark: React.FC<{ className?: string; rounded?: boolean }> = ({
   </span>
 );
 
+interface KityGamerBadgeProps {
+  size?: 'sm' | 'md';
+  className?: string;
+}
+
+export const KityGamerBadge: React.FC<KityGamerBadgeProps> = ({
+  size = 'sm',
+  className = '',
+}) => {
+  const sizeCls =
+    size === 'md'
+      ? 'px-3 py-1.5 text-xs gap-2'
+      : 'px-2.5 py-1 text-[11px] gap-1.5';
+  const iconCls = size === 'md' ? 'w-3.5 h-3.5' : 'w-3 h-3';
+  return (
+    <a
+      href="https://t.me/kitygamer"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Open @kitygamer on Telegram"
+      className={`inline-flex items-center align-middle rounded-full font-semibold leading-none tracking-tight text-white bg-gradient-to-r from-[#2AABEE] to-[#229ED9] hover:from-[#34B7F1] hover:to-[#1D94CF] ring-1 ring-white/20 shadow-[0_4px_14px_-4px_rgba(34,158,217,0.65)] hover:shadow-[0_6px_18px_-4px_rgba(34,158,217,0.8)] transition-all duration-150 hover:-translate-y-px no-underline whitespace-nowrap ${sizeCls} ${className}`}
+    >
+      <svg
+        viewBox="0 0 24 24"
+        className={iconCls}
+        fill="currentColor"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path d="M21.94 4.36 18.76 19.4c-.24 1.07-.88 1.33-1.78.83l-4.92-3.62-2.37 2.28c-.26.26-.48.48-.99.48l.35-5.01 9.13-8.25c.4-.35-.09-.55-.61-.2L7.27 12.99 2.4 11.47c-1.06-.33-1.08-1.06.22-1.57L20.58 3c.88-.32 1.65.21 1.36 1.36z" />
+      </svg>
+      <span>@kitygamer</span>
+    </a>
+  );
+};
+
 export default ProductVisual;
