@@ -1,0 +1,9 @@
+node_modules
+dist
+.cache
+.local
+.agents
+.replit
+replit.nix
+zipFile.zip
+*.log
