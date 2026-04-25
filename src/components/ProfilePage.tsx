@@ -345,14 +345,30 @@ const ProfilePage: React.FC = () => {
             <div className="relative flex-1">
               <Icon name="ticket" className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none" />
               <input
-                type="text" value={trialCode}
-                onChange={(e) => { setTrialCode(e.target.value.toUpperCase()); setTrialError(null); }}
-                onKeyDown={(e) => { if (e.key === 'Enter') handleRedeem(); }}
+                type="text"
+                value={trialCode}
+                onChange={(e) => {
+                  const cleaned = e.target.value.replace(/\s+/g, '').toUpperCase();
+                  setTrialCode(cleaned);
+                  setTrialError(null);
+                }}
+                onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleRedeem(); } }}
                 placeholder="e.g. TRIAL2024"
-                className="input-field pl-9 uppercase font-mono"
+                maxLength={32}
+                autoCapitalize="characters"
+                autoCorrect="off"
+                autoComplete="off"
+                spellCheck={false}
+                inputMode="text"
+                aria-label="Trial code"
+                className="input-field pl-9 font-mono tracking-wider"
               />
             </div>
-            <button onClick={handleRedeem} className="btn-primary px-4 py-2.5 rounded-xl text-sm flex-shrink-0">
+            <button
+              onClick={handleRedeem}
+              disabled={!trialCode.trim()}
+              className="btn-primary px-4 py-2.5 rounded-xl text-sm flex-shrink-0"
+            >
               <Icon name="key" className="w-4 h-4" /> Redeem
             </button>
           </div>
@@ -372,7 +388,7 @@ const ProfilePage: React.FC = () => {
       {/* Trial Success Modal */}
       {trialResult && (
         <div
-          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 animate-fade-in"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in"
           role="dialog"
           aria-modal="true"
           aria-labelledby="trial-success-title"
@@ -381,11 +397,7 @@ const ProfilePage: React.FC = () => {
             className="absolute inset-0 bg-bg/80 backdrop-blur-md"
             onClick={() => setTrialResult(null)}
           />
-          <div className="relative w-full sm:max-w-md bg-bg-card border border-border sm:border-success/30 rounded-t-3xl sm:rounded-2xl shadow-[0_-20px_60px_-10px_rgba(0,0,0,0.6)] sm:shadow-[0_20px_60px_-10px_rgba(34,211,155,0.25)] overflow-hidden animate-trial-pop">
-            <div className="sm:hidden flex justify-center pt-2.5 pb-1">
-              <span className="w-10 h-1.5 rounded-full bg-border" />
-            </div>
-
+          <div className="relative w-full max-w-md bg-bg-card border border-success/30 rounded-2xl shadow-[0_20px_60px_-10px_rgba(34,211,155,0.25)] overflow-hidden animate-trial-pop max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => setTrialResult(null)}
               aria-label="Close"
