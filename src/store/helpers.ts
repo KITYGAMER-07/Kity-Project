@@ -18,16 +18,11 @@ export function getStockCount(fileId: number, durationDays: number): number {
 }
 
 export function FileIcon({ fileName }: { fileName: string }): string {
-  const n = fileName.toLowerCase();
-  if (n.includes('bgmi') || n.includes('pubg')) return '🔫';
-  if (n.includes('free fire') || n.includes('ff')) return '🔥';
-  if (n.includes('clash')) return '⚔️';
-  if (n.includes('cod') || n.includes('call')) return '🎯';
-  if (n.includes('minecraft')) return '⛏️';
-  if (n.includes('fortnite')) return '🏗️';
-  if (n.includes('gta')) return '🚗';
-  if (n.includes('valorant') || n.includes('valo')) return '🎯';
-  return '🎮';
+  const cleaned = (fileName || '').trim().replace(/[^A-Za-z0-9 ]/g, ' ').replace(/\s+/g, ' ');
+  if (!cleaned) return 'KS';
+  const parts = cleaned.split(' ').filter(Boolean);
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[1][0]).toUpperCase();
 }
 
 export function formatDate(iso: string): string {

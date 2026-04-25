@@ -3,6 +3,8 @@ import { useApp } from '../store/AppContext';
 import { getFileById, getPricesByFileId, getStockCount } from '../store/helpers';
 import { getSetting, addPayment, updatePayment, getPaymentById, compressImage, addAdminNotification } from '../store/db';
 import { QRCodeSVG } from 'qrcode.react';
+import { Icon } from './Icon';
+import { ProductVisual } from './ProductVisual';
 
 interface Props { fileId: number; }
 
@@ -18,6 +20,7 @@ const GameDetailPage: React.FC<Props> = ({ fileId }) => {
   const [timer, setTimer] = useState(600);
   const [rejectReason, setRejectReason] = useState('');
   const [uploading, setUploading] = useState(false);
+  const [copied, setCopied] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -37,11 +40,27 @@ const GameDetailPage: React.FC<Props> = ({ fileId }) => {
   }, [step, payId, refreshData]);
 
   if (!file) {
-    return <div className="text-center py-16 px-4"><div className="text-5xl mb-4">❌</div><p className="text-text-secondary text-sm">Product not found</p><button onClick={() => navigate('games')} className="btn-primary mt-4 px-6 py-2 rounded-xl text-sm">← Back</button></div>;
+    return (
+      <div className="text-center py-16 px-4 animate-fade-in">
+        <span className="empty-icon" style={{ background: 'rgba(255,90,107,0.12)', borderColor: 'rgba(255,90,107,0.25)', color: 'var(--color-danger)' }}>
+          <Icon name="x-circle" className="w-6 h-6" />
+        </span>
+        <p className="text-text-secondary text-sm mt-2">Product not found</p>
+        <button onClick={() => navigate('games')} className="btn-primary mt-4 px-6 py-2 rounded-xl text-sm">
+          <Icon name="arrow-left" className="w-4 h-4" /> Back
+        </button>
+      </div>
+    );
   }
 
   const upiId = getSetting('UPI_ID') || 'kitygamer@paytm';
   const curPrice = prices[selectedPlan] || prices[0];
+
+  const copyKey = (k: string) => {
+    navigator.clipboard?.writeText(k);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
 
   const handleBuy = () => {
     if (!curPrice) return;
@@ -49,9 +68,9 @@ const GameDetailPage: React.FC<Props> = ({ fileId }) => {
     setPayId(p.id); setStep('payment'); setTimer(600);
   };
 
-  const handleDone = () => { 
-    updatePayment(payId, { doneClicked: true }); 
-    setStep('upload'); 
+  const handleDone = () => {
+    updatePayment(payId, { doneClicked: true });
+    setStep('upload');
   };
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,14 +78,11 @@ const GameDetailPage: React.FC<Props> = ({ fileId }) => {
     if (!f) return;
     setUploading(true);
     try {
-      // Show preview immediately
       const previewUrl = URL.createObjectURL(f);
       setProofPreview(previewUrl);
-      // Compress image for storage
       const compressed = await compressImage(f, 400, 0.5);
       setProofImage(compressed);
     } catch {
-      // Fallback: try direct data URL
       try {
         const reader = new FileReader();
         reader.onload = (ev) => {
@@ -85,16 +101,13 @@ const GameDetailPage: React.FC<Props> = ({ fileId }) => {
     if (!proofImage) return;
     try {
       updatePayment(payId, { proofImage, status: 'PROOF_UPLOADED' });
-      
-      // Send notification to admin
       const price = prices.find(p => p.id === curPrice?.id);
       addAdminNotification(
         'PAYMENT_PROOF',
-        '📸 Payment Proof Uploaded!',
-        `${currentUser?.username || 'User'} uploaded proof for ${file.fileName} - ₹${price?.price || 0} (${price?.durationDays || 0}D)`,
+        'Payment proof uploaded',
+        `${currentUser?.username || 'User'} uploaded proof for ${file.fileName} — ₹${price?.price || 0} (${price?.durationDays || 0}D)`,
         payId
       );
-      
       setStep('waiting');
       refreshData();
     } catch {
@@ -106,92 +119,157 @@ const GameDetailPage: React.FC<Props> = ({ fileId }) => {
   const secs = timer % 60;
   const progress = ((600 - timer) / 600) * 100;
 
+  // ===== SUCCESS =====
   if (step === 'success') {
     const pay = getPaymentById(payId);
     return (
-      <div className="max-w-lg mx-auto p-3 sm:p-4 text-center animate-fade-in">
-        <div className="glass-card rounded-2xl p-6 sm:p-8">
-          <div className="text-5xl sm:text-6xl mb-4">🎉</div>
-          <h2 className="text-xl sm:text-2xl font-bold text-success mb-2">Payment Approved!</h2>
-          <p className="text-text-secondary text-sm mb-4">Your purchase has been verified.</p>
+      <div className="max-w-lg mx-auto p-3 sm:p-4 animate-fade-in">
+        <div className="panel-card p-6 sm:p-8 text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-success/15 border border-success/30 text-success mb-4">
+            <Icon name="check-circle" className="w-9 h-9 sm:w-11 sm:h-11" />
+          </div>
+          <h2 className="text-xl sm:text-2xl font-extrabold mb-2">Payment approved</h2>
+          <p className="text-text-secondary text-sm mb-5">Your purchase has been verified.</p>
 
           {pay?.deliveredKey && (
-            <div className="bg-success/10 border border-success/20 rounded-xl p-4 mb-4 text-left">
-              <p className="text-success text-sm font-semibold mb-1">🔑 Your Activation Key:</p>
-              <div className="bg-success/10 rounded-lg p-3 flex items-center justify-between gap-2">
+            <div className="bg-success/[0.08] border border-success/25 rounded-xl p-4 mb-4 text-left">
+              <p className="text-success text-xs font-semibold mb-2 inline-flex items-center gap-1.5">
+                <Icon name="key" className="w-3.5 h-3.5" /> Your activation key
+              </p>
+              <div className="bg-bg/40 rounded-lg p-3 flex items-center justify-between gap-2">
                 <code className="text-success font-mono text-sm break-all">{pay.deliveredKey}</code>
-                <button onClick={() => navigator.clipboard?.writeText(pay.deliveredKey!)} className="text-success text-xs bg-success/20 px-2 py-1 rounded flex-shrink-0">📋</button>
+                <button
+                  onClick={() => copyKey(pay.deliveredKey!)}
+                  className="text-success text-xs bg-success/15 hover:bg-success/25 px-2.5 py-1.5 rounded-lg flex items-center gap-1 flex-shrink-0 transition-colors"
+                  aria-label="Copy key"
+                >
+                  <Icon name={copied ? 'check' : 'copy'} className="w-3.5 h-3.5" />
+                  {copied ? 'Copied' : 'Copy'}
+                </button>
               </div>
             </div>
           )}
 
           {pay?.deliveredFile && (
-            <div className="bg-primary/10 border border-primary/20 rounded-xl p-4 mb-4 text-left">
-              <p className="text-primary-light text-sm font-semibold mb-2">📁 Your File:</p>
+            <div className="bg-primary/[0.08] border border-primary/25 rounded-xl p-4 mb-4 text-left">
+              <p className="text-primary-light text-xs font-semibold mb-2 inline-flex items-center gap-1.5">
+                <Icon name="folder" className="w-3.5 h-3.5" /> Your file
+              </p>
               {pay.deliveredFile.startsWith('data:image/') ? (
-                <img src={pay.deliveredFile} alt="Delivered" className="max-h-48 rounded-lg mb-2" />
+                <img src={pay.deliveredFile} alt="Delivered" className="max-h-48 rounded-lg" />
               ) : pay.deliveredFile.startsWith('data:') ? (
-                <a href={pay.deliveredFile} download={pay.deliveredFileName || 'file'} className="btn-accent px-4 py-2 rounded-xl text-sm inline-flex items-center gap-2">
-                  📥 Download {pay.deliveredFileName}
+                <a
+                  href={pay.deliveredFile}
+                  download={pay.deliveredFileName || 'file'}
+                  className="btn-accent px-4 py-2 rounded-xl text-sm inline-flex items-center gap-2"
+                >
+                  <Icon name="download" className="w-4 h-4" />
+                  Download {pay.deliveredFileName}
                 </a>
               ) : null}
             </div>
           )}
 
-          <button onClick={() => { refreshData(); navigate('games'); }} className="btn-primary px-6 py-2 rounded-xl text-sm">← Back to Store</button>
+          <button
+            onClick={() => { refreshData(); navigate('games'); }}
+            className="btn-primary px-6 py-2.5 rounded-xl text-sm"
+          >
+            <Icon name="arrow-left" className="w-4 h-4" /> Back to store
+          </button>
         </div>
       </div>
     );
   }
 
+  // ===== REJECTED =====
   if (step === 'rejected') {
     return (
-      <div className="max-w-lg mx-auto p-3 sm:p-4 text-center animate-fade-in">
-        <div className="glass-card rounded-2xl p-6 sm:p-8">
-          <div className="text-5xl sm:text-6xl mb-4">❌</div>
-          <h2 className="text-xl sm:text-2xl font-bold text-danger mb-2">Rejected</h2>
-          <p className="text-text-secondary text-sm mb-1">Reason: <em className="text-warning">{rejectReason}</em></p>
-          <p className="text-text-muted text-xs mb-4">Contact @KITYGAMER</p>
-          <button onClick={() => { refreshData(); setStep('plans'); }} className="btn-primary px-6 py-2 rounded-xl text-sm">Try Again</button>
+      <div className="max-w-lg mx-auto p-3 sm:p-4 animate-fade-in">
+        <div className="panel-card p-6 sm:p-8 text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-danger/15 border border-danger/30 text-danger mb-4">
+            <Icon name="x-circle" className="w-9 h-9 sm:w-11 sm:h-11" />
+          </div>
+          <h2 className="text-xl sm:text-2xl font-extrabold mb-2">Payment rejected</h2>
+          <div className="status-badge status-warning mb-3">
+            <Icon name="alert" className="w-3 h-3" /> {rejectReason}
+          </div>
+          <p className="text-text-muted text-xs mb-5">Need help? Contact @KITYGAMER</p>
+          <button
+            onClick={() => { refreshData(); setStep('plans'); }}
+            className="btn-primary px-6 py-2.5 rounded-xl text-sm"
+          >
+            <Icon name="rocket" className="w-4 h-4" /> Try again
+          </button>
         </div>
       </div>
     );
   }
 
+  // ===== UPLOAD =====
   if (step === 'upload') {
     return (
       <div className="max-w-lg mx-auto p-3 sm:p-4 animate-fade-in">
-        <div className="glass-card rounded-2xl p-4 sm:p-6">
-          <h2 className="text-lg sm:text-xl font-bold mb-4 text-center">📸 Upload Payment Proof</h2>
-          
+        <div className="panel-card p-4 sm:p-6">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="icon-box icon-box-warning">
+              <Icon name="camera" className="w-4 h-4" />
+            </span>
+            <h2 className="text-base sm:text-lg font-bold">Upload payment proof</h2>
+          </div>
+
           <div
             onClick={() => !uploading && fileInputRef.current?.click()}
-            className={`border-2 border-dashed rounded-xl p-6 sm:p-8 text-center cursor-pointer hover:border-primary transition-all mb-4 ${proofPreview ? 'border-primary/50 bg-primary/5' : 'border-border'}`}
+            onKeyDown={(e) => { if ((e.key === 'Enter' || e.key === ' ') && !uploading) fileInputRef.current?.click(); }}
+            role="button"
+            tabIndex={0}
+            className={`border-2 border-dashed rounded-xl p-6 sm:p-8 text-center cursor-pointer hover:border-primary/60 hover:bg-primary/[0.04] transition-all mb-4 ${
+              proofPreview ? 'border-primary/50 bg-primary/[0.06]' : 'border-border'
+            }`}
           >
             {uploading ? (
               <div>
-                <div className="text-3xl mb-2 animate-pulse">⏳</div>
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/15 text-primary-light mb-3 animate-pulse-soft">
+                  <Icon name="clock" className="w-6 h-6" />
+                </div>
                 <p className="text-text-secondary text-sm">Processing image...</p>
               </div>
             ) : proofPreview ? (
               <div>
-                <img src={proofPreview} alt="Proof" className="max-h-44 mx-auto rounded-lg mb-2" />
-                <p className="text-success text-xs">✅ Ready to submit — Tap to change</p>
+                <img src={proofPreview} alt="Proof" className="max-h-44 mx-auto rounded-lg mb-3" />
+                <p className="text-success text-xs inline-flex items-center gap-1.5">
+                  <Icon name="check-circle" className="w-3.5 h-3.5" />
+                  Ready to submit — tap to change
+                </p>
               </div>
             ) : (
               <div>
-                <div className="text-4xl mb-2">📷</div>
+                <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary/15 text-primary-light mb-3">
+                  <Icon name="upload" className="w-6 h-6" />
+                </div>
                 <p className="text-text-secondary text-sm">Tap to upload screenshot</p>
-                <p className="text-text-muted text-xs mt-1">JPG, PNG supported</p>
+                <p className="text-text-muted text-xs mt-1">JPG or PNG</p>
               </div>
             )}
           </div>
           <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileSelect} className="hidden" />
-          
+
           <div className="flex gap-2">
-            <button onClick={() => setStep('payment')} className="flex-1 bg-surface-lighter py-3 rounded-xl text-text-secondary text-sm">← Back</button>
-            <button onClick={handleProofUpload} disabled={!proofImage || uploading} className="flex-1 btn-accent py-3 rounded-xl font-semibold text-sm disabled:opacity-50">
-              {uploading ? '⏳ Processing...' : '✅ Submit Proof'}
+            <button
+              onClick={() => setStep('payment')}
+              className="flex-1 btn-secondary py-3 rounded-xl text-sm"
+            >
+              <Icon name="arrow-left" className="w-4 h-4" /> Back
+            </button>
+            <button
+              onClick={handleProofUpload}
+              disabled={!proofImage || uploading}
+              className="flex-1 btn-accent py-3 rounded-xl text-sm"
+            >
+              {uploading ? (
+                <><Icon name="clock" className="w-4 h-4" /> Processing...</>
+              ) : (
+                <><Icon name="check" className="w-4 h-4" /> Submit proof</>
+              )}
             </button>
           </div>
         </div>
@@ -199,45 +277,102 @@ const GameDetailPage: React.FC<Props> = ({ fileId }) => {
     );
   }
 
+  // ===== PAYMENT or WAITING =====
   if (step === 'payment' || step === 'waiting') {
     const isWaiting = step === 'waiting';
     return (
       <div className="max-w-lg mx-auto p-3 sm:p-4 animate-fade-in">
-        <div className="glass-card rounded-2xl p-4 sm:p-6">
+        <div className="panel-card p-4 sm:p-6">
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-lg sm:text-xl font-bold">💳 Payment</h2>
-            <div className={`px-2 py-1 rounded-full text-xs font-mono ${timer < 60 ? 'bg-danger/20 text-danger animate-pulse' : 'bg-surface-lighter text-text-secondary'}`}>
+            <div className="flex items-center gap-2">
+              <span className="icon-box icon-box-accent">
+                <Icon name="card" className="w-4 h-4" />
+              </span>
+              <h2 className="text-base sm:text-lg font-bold">Payment</h2>
+            </div>
+            <div
+              className={`px-2.5 py-1 rounded-full text-xs font-mono inline-flex items-center gap-1.5 border ${
+                timer < 60
+                  ? 'bg-danger/15 text-danger border-danger/25 animate-pulse-soft'
+                  : 'bg-surface-lighter text-text-secondary border-border'
+              }`}
+            >
+              <Icon name="clock" className="w-3 h-3" />
               {String(mins).padStart(2, '0')}:{String(secs).padStart(2, '0')}
             </div>
           </div>
-          <div className="w-full bg-surface-lighter rounded-full h-1.5 mb-4"><div className="progress-bar h-1.5 rounded-full" style={{ width: `${progress}%` }} /></div>
-
-          <div className="bg-white rounded-xl p-3 sm:p-4 mb-4 flex justify-center">
-            <QRCodeSVG value={`upi://pay?pa=${upiId}&pn=KITYStore&am=${curPrice?.price || 0}&cu=INR`} size={160} level="M" />
+          <div className="w-full bg-surface-lighter rounded-full h-1.5 mb-5 overflow-hidden">
+            <div className="progress-bar h-1.5 rounded-full" style={{ width: `${progress}%` }} />
           </div>
 
-          <div className="space-y-1.5 mb-4 text-sm">
-            <div className="flex justify-between"><span className="text-text-secondary">Amount</span><span className="font-bold text-accent">₹{curPrice?.price || 0}</span></div>
-            <div className="flex justify-between"><span className="text-text-secondary">Duration</span><span>{curPrice?.durationDays || 0} Days</span></div>
-            <div className="flex justify-between"><span className="text-text-secondary">UPI</span><span className="font-mono text-xs text-primary-light truncate ml-2">{upiId}</span></div>
-            <div className="flex justify-between"><span className="text-text-secondary">Product</span><span className="text-right max-w-[50%] truncate">{file.fileName}</span></div>
+          <div className="bg-white rounded-xl p-3 sm:p-4 mb-4 flex justify-center relative">
+            <QRCodeSVG
+              value={`upi://pay?pa=${upiId}&pn=KITYStore&am=${curPrice?.price || 0}&cu=INR`}
+              size={170}
+              level="M"
+            />
+            <span className="absolute top-2 left-2 text-[10px] font-medium text-bg/70 inline-flex items-center gap-1">
+              <Icon name="qr" className="w-3 h-3" /> UPI QR
+            </span>
           </div>
+
+          <dl className="space-y-2 mb-5 text-sm">
+            <div className="flex justify-between items-center py-1.5 border-b border-border/60">
+              <dt className="text-text-secondary inline-flex items-center gap-1.5">
+                <Icon name="tag" className="w-3.5 h-3.5" /> Amount
+              </dt>
+              <dd className="font-extrabold text-accent text-base">₹{curPrice?.price || 0}</dd>
+            </div>
+            <div className="flex justify-between items-center py-1.5 border-b border-border/60">
+              <dt className="text-text-secondary inline-flex items-center gap-1.5">
+                <Icon name="clock" className="w-3.5 h-3.5" /> Duration
+              </dt>
+              <dd>{curPrice?.durationDays || 0} days</dd>
+            </div>
+            <div className="flex justify-between items-center py-1.5 border-b border-border/60 gap-2">
+              <dt className="text-text-secondary inline-flex items-center gap-1.5 flex-shrink-0">
+                <Icon name="wallet" className="w-3.5 h-3.5" /> UPI
+              </dt>
+              <dd className="font-mono text-xs text-primary-light truncate">{upiId}</dd>
+            </div>
+            <div className="flex justify-between items-center py-1.5 gap-2">
+              <dt className="text-text-secondary inline-flex items-center gap-1.5 flex-shrink-0">
+                <Icon name="folder" className="w-3.5 h-3.5" /> Product
+              </dt>
+              <dd className="text-right truncate">{file.fileName}</dd>
+            </div>
+          </dl>
 
           {isWaiting ? (
-            <div className="text-center py-3">
-              <div className="animate-pulse text-2xl mb-2">⏳</div>
+            <div className="text-center py-4 px-3 rounded-xl bg-warning/[0.06] border border-warning/20">
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-warning/15 text-warning mb-2 animate-pulse-soft">
+                <Icon name="clock" className="w-6 h-6" />
+              </div>
               <p className="text-text-secondary text-sm font-medium">Waiting for admin approval...</p>
-              <p className="text-text-muted text-xs mt-1">Admin has been notified • Auto-updating</p>
-              <div className="mt-3 w-full bg-surface-lighter rounded-full h-1">
-                <div className="bg-warning h-1 rounded-full animate-pulse" style={{ width: '60%' }} />
+              <p className="text-text-muted text-xs mt-1">Admin notified — auto-updating</p>
+              <div className="mt-3 w-full bg-surface-lighter rounded-full h-1 overflow-hidden">
+                <div className="bg-warning h-1 rounded-full animate-pulse-soft" style={{ width: '60%' }} />
               </div>
             </div>
           ) : (
             <>
-              <div className="bg-surface-lighter rounded-xl p-3 mb-3"><p className="text-xs text-text-muted text-center">⚠️ Pay using QR/UPI, then tap Done to upload proof</p></div>
+              <div className="bg-surface-lighter rounded-xl p-3 mb-3 inline-flex items-start gap-2 w-full border border-border">
+                <Icon name="info" className="w-4 h-4 text-info flex-shrink-0 mt-0.5" />
+                <p className="text-xs text-text-muted">Pay using QR or UPI ID, then tap Done to upload your proof.</p>
+              </div>
               <div className="flex gap-2">
-                <button onClick={() => { setStep('plans'); setTimer(600); }} className="flex-1 bg-surface-lighter py-3 rounded-xl text-text-secondary text-sm">← Cancel</button>
-                <button onClick={handleDone} className="flex-1 btn-accent py-3 rounded-xl font-semibold text-sm">✅ Done</button>
+                <button
+                  onClick={() => { setStep('plans'); setTimer(600); }}
+                  className="flex-1 btn-secondary py-3 rounded-xl text-sm"
+                >
+                  <Icon name="x" className="w-4 h-4" /> Cancel
+                </button>
+                <button
+                  onClick={handleDone}
+                  className="flex-1 btn-accent py-3 rounded-xl text-sm"
+                >
+                  <Icon name="check" className="w-4 h-4" /> Done
+                </button>
               </div>
             </>
           )}
@@ -246,46 +381,87 @@ const GameDetailPage: React.FC<Props> = ({ fileId }) => {
     );
   }
 
+  // ===== PLANS =====
   return (
     <div className="max-w-3xl mx-auto px-3 sm:px-4 py-4 sm:py-6 animate-fade-in">
-      <button onClick={() => navigate('games')} className="text-text-secondary hover:text-white text-sm mb-3 inline-block">← Back</button>
-      <div className="glass-card rounded-2xl overflow-hidden">
-        <div className="h-32 sm:h-40 bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center">
-          <span className="text-5xl sm:text-6xl">🎮</span>
-        </div>
+      <button
+        onClick={() => navigate('games')}
+        className="btn-ghost text-sm mb-3 px-2 py-1.5 -ml-2"
+      >
+        <Icon name="arrow-left" className="w-4 h-4" /> Back
+      </button>
+
+      <div className="panel-card overflow-hidden">
+        <ProductVisual
+          name={file.fileName}
+          seed={file.id}
+          className="h-36 sm:h-52"
+          initialsClassName="text-4xl sm:text-6xl"
+        />
         <div className="p-4 sm:p-6">
-          <h2 className="text-xl sm:text-2xl font-bold mb-1">{file.fileName}</h2>
-          <p className="text-text-muted text-xs sm:text-sm mb-5">{file.fileSize}</p>
+          <h2 className="text-xl sm:text-2xl font-extrabold mb-1">{file.fileName}</h2>
+          <div className="flex items-center gap-3 text-text-muted text-xs sm:text-sm mb-5">
+            <span className="inline-flex items-center gap-1.5">
+              <Icon name="file" className="w-3.5 h-3.5" /> {file.fileSize}
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <Icon name="shield" className="w-3.5 h-3.5 text-success" /> Verified
+            </span>
+          </div>
 
           {prices.length === 0 ? (
-            <p className="text-text-secondary text-center py-6 text-sm">No plans available</p>
+            <div className="empty-state">
+              <span className="empty-icon"><Icon name="tag" className="w-5 h-5" /></span>
+              <p className="text-sm">No plans available yet</p>
+            </div>
           ) : (
             <>
-              <h3 className="font-semibold text-sm sm:text-base mb-3">💰 Choose Plan</h3>
+              <h3 className="section-title mb-3 text-sm sm:text-base">
+                <Icon name="tag" className="w-4 h-4 text-accent" />
+                Choose your plan
+              </h3>
               <div className="space-y-2">
                 {prices.map((price, idx) => {
                   const stock = getStockCount(fileId, price.durationDays);
                   const sel = selectedPlan === idx;
+                  const oos = stock === 0;
                   return (
-                    <div key={price.id} onClick={() => setSelectedPlan(idx)} className={`p-3 sm:p-4 rounded-xl border cursor-pointer transition-all ${sel ? 'border-primary bg-primary/10' : 'border-border bg-surface-lighter'}`}>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2 sm:gap-3">
-                          <div className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${sel ? 'border-primary bg-primary' : 'border-border'}`}>
-                            {sel && <span className="text-white text-[8px]">✓</span>}
-                          </div>
-                          <div>
-                            <p className="font-medium text-sm">{price.durationDays} Days</p>
-                            <p className="text-text-muted text-[10px] sm:text-xs">{stock > 0 ? `${stock} in stock` : 'Out of stock'}</p>
-                          </div>
+                    <button
+                      key={price.id}
+                      onClick={() => setSelectedPlan(idx)}
+                      disabled={oos}
+                      className={`w-full text-left p-3 sm:p-4 rounded-xl border cursor-pointer transition-all flex items-center justify-between gap-3 ${
+                        sel ? 'border-primary bg-primary/10' : 'border-border bg-surface-lighter/60 hover:border-primary/40'
+                      } ${oos ? 'opacity-60 cursor-not-allowed' : ''}`}
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <span
+                          className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
+                            sel ? 'border-primary bg-primary text-white' : 'border-border'
+                          }`}
+                        >
+                          {sel && <Icon name="check" className="w-3 h-3" strokeWidth={3} />}
+                        </span>
+                        <div className="min-w-0">
+                          <p className="font-semibold text-sm">{price.durationDays} days</p>
+                          <span className={`status-badge mt-1 ${oos ? 'status-danger' : 'status-success'}`}>
+                            <span className="dot" />
+                            {oos ? 'Out of stock' : `${stock} in stock`}
+                          </span>
                         </div>
-                        <span className="text-accent font-bold text-base sm:text-xl">₹{price.price}</span>
                       </div>
-                    </div>
+                      <span className="text-accent font-extrabold text-base sm:text-xl flex-shrink-0">₹{price.price}</span>
+                    </button>
                   );
                 })}
               </div>
-              <button onClick={handleBuy} disabled={!curPrice || getStockCount(fileId, curPrice?.durationDays || 0) === 0} className="w-full btn-accent mt-4 py-3 rounded-xl font-semibold text-sm sm:text-base disabled:opacity-50">
-                🛒 Buy Now — ₹{curPrice?.price || 0}
+              <button
+                onClick={handleBuy}
+                disabled={!curPrice || getStockCount(fileId, curPrice?.durationDays || 0) === 0}
+                className="w-full btn-accent mt-5 py-3 rounded-xl text-sm sm:text-base"
+              >
+                <Icon name="zap" className="w-4 h-4" />
+                Buy now — ₹{curPrice?.price || 0}
               </button>
             </>
           )}
