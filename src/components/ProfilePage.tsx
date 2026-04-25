@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useApp } from '../store/AppContext';
 import { getPayments, addTrialLog, getTrialByCode, getFileById, addFeedback, getNotificationsFor, markNotifRead, markAllNotifsRead, Notification } from '../store/db';
 import { formatDate } from '../store/helpers';
@@ -36,10 +36,23 @@ const ProfilePage: React.FC = () => {
   const { currentUser, currentUserId, navigate, refreshData, refreshNotifs } = useApp();
   const [tab, setTab] = useState<Tab>('profile');
   const [trialCode, setTrialCode] = useState('');
-  const [trialMsg, setTrialMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [trialError, setTrialError] = useState<string | null>(null);
+  const [trialResult, setTrialResult] = useState<{ key: string; fileName: string; code: string } | null>(null);
   const [feedbackText, setFeedbackText] = useState('');
   const [feedbackSent, setFeedbackSent] = useState(false);
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!trialResult) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setTrialResult(null); };
+    document.addEventListener('keydown', onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [trialResult]);
 
   if (!currentUser) {
     return (
@@ -67,14 +80,18 @@ const ProfilePage: React.FC = () => {
 
   const handleRedeem = () => {
     if (!trialCode.trim()) return;
-    const trial = getTrialByCode(trialCode.trim());
+    const code = trialCode.trim().toUpperCase();
+    const trial = getTrialByCode(code);
     if (trial) {
       const file = getFileById(trial.fileId);
-      addTrialLog(currentUserId, currentUser.username, trialCode.trim().toUpperCase(), file?.fileName || '?', trial.trialKey);
-      setTrialMsg({ type: 'success', text: `Trial key: ${trial.trialKey}` });
-      setTrialCode(''); refreshData();
+      const fileName = file?.fileName || 'Trial product';
+      addTrialLog(currentUserId, currentUser.username, code, fileName, trial.trialKey);
+      setTrialResult({ key: trial.trialKey, fileName, code });
+      setTrialError(null);
+      setTrialCode('');
+      refreshData();
     } else {
-      setTrialMsg({ type: 'error', text: 'Invalid trial code' });
+      setTrialError('Invalid trial code. Please check and try again.');
     }
   };
 
@@ -329,7 +346,8 @@ const ProfilePage: React.FC = () => {
               <Icon name="ticket" className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none" />
               <input
                 type="text" value={trialCode}
-                onChange={(e) => { setTrialCode(e.target.value.toUpperCase()); setTrialMsg(null); }}
+                onChange={(e) => { setTrialCode(e.target.value.toUpperCase()); setTrialError(null); }}
+                onKeyDown={(e) => { if (e.key === 'Enter') handleRedeem(); }}
                 placeholder="e.g. TRIAL2024"
                 className="input-field pl-9 uppercase font-mono"
               />
@@ -338,21 +356,95 @@ const ProfilePage: React.FC = () => {
               <Icon name="key" className="w-4 h-4" /> Redeem
             </button>
           </div>
-          {trialMsg && (
-            <div
-              className={`mt-3 p-3 rounded-lg text-xs inline-flex items-start gap-2 w-full border ${
-                trialMsg.type === 'success'
-                  ? 'bg-success/[0.08] border-success/25 text-success'
-                  : 'bg-danger/[0.08] border-danger/25 text-danger'
-              }`}
-            >
-              <Icon name={trialMsg.type === 'success' ? 'check-circle' : 'x-circle'} className="w-4 h-4 flex-shrink-0 mt-0.5" />
-              <span className="break-all">{trialMsg.text}</span>
+          {trialError && (
+            <div className="mt-3 p-3 rounded-lg text-xs inline-flex items-start gap-2 w-full border bg-danger/[0.08] border-danger/25 text-danger">
+              <Icon name="x-circle" className="w-4 h-4 flex-shrink-0 mt-0.5" />
+              <span className="break-all">{trialError}</span>
             </div>
           )}
           <div className="mt-3 p-3 bg-surface-lighter rounded-lg border border-border inline-flex items-start gap-2 w-full">
             <Icon name="info" className="w-4 h-4 text-info flex-shrink-0 mt-0.5" />
             <p className="text-text-muted text-[11px]">Try: <code className="text-primary-light font-mono">TRIAL2024</code>, <code className="text-primary-light font-mono">FREEFIRE</code></p>
+          </div>
+        </div>
+      )}
+
+      {/* Trial Success Modal */}
+      {trialResult && (
+        <div
+          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 animate-fade-in"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="trial-success-title"
+        >
+          <div
+            className="absolute inset-0 bg-bg/80 backdrop-blur-md"
+            onClick={() => setTrialResult(null)}
+          />
+          <div className="relative w-full sm:max-w-md bg-bg-card border border-border sm:border-success/30 rounded-t-3xl sm:rounded-2xl shadow-[0_-20px_60px_-10px_rgba(0,0,0,0.6)] sm:shadow-[0_20px_60px_-10px_rgba(34,211,155,0.25)] overflow-hidden animate-trial-pop">
+            <div className="sm:hidden flex justify-center pt-2.5 pb-1">
+              <span className="w-10 h-1.5 rounded-full bg-border" />
+            </div>
+
+            <button
+              onClick={() => setTrialResult(null)}
+              aria-label="Close"
+              className="absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center text-text-muted hover:text-white hover:bg-white/10 transition-colors z-10"
+            >
+              <Icon name="x" className="w-4 h-4" />
+            </button>
+
+            <div className="px-5 sm:px-7 pt-6 pb-3 text-center">
+              <div className="relative inline-flex mb-3">
+                <span className="absolute inset-0 rounded-full bg-success/30 blur-xl animate-pulse-soft" />
+                <span className="relative w-16 h-16 rounded-full bg-gradient-to-br from-success to-emerald-400 flex items-center justify-center text-bg shadow-lg ring-4 ring-success/20">
+                  <Icon name="check-circle" className="w-8 h-8" />
+                </span>
+              </div>
+              <h3 id="trial-success-title" className="text-xl sm:text-2xl font-extrabold mb-1">Trial activated</h3>
+              <p className="text-text-secondary text-xs sm:text-sm">
+                Code <code className="text-primary-light font-mono">{trialResult.code}</code> redeemed successfully
+              </p>
+            </div>
+
+            <div className="px-5 sm:px-7 pb-5">
+              <div className="rounded-2xl bg-surface-lighter/60 border border-border p-3 sm:p-4 mb-4">
+                <p className="text-text-muted text-[10px] uppercase tracking-wider mb-1.5 inline-flex items-center gap-1.5">
+                  <Icon name="file" className="w-3 h-3" /> Product
+                </p>
+                <p className="font-semibold text-sm sm:text-base break-words">{trialResult.fileName}</p>
+              </div>
+
+              <div>
+                <p className="text-text-muted text-[10px] uppercase tracking-wider mb-1.5 inline-flex items-center gap-1.5 px-1">
+                  <Icon name="key" className="w-3 h-3" /> Your trial key
+                </p>
+                <div className="bg-success/[0.08] border border-success/25 rounded-xl p-3 sm:p-3.5 flex items-center justify-between gap-2 sm:gap-3">
+                  <code className="text-success font-mono text-sm sm:text-base font-semibold break-all select-all flex-1">
+                    {trialResult.key}
+                  </code>
+                  <button
+                    onClick={() => copyKey(trialResult.key)}
+                    className="text-success bg-success/15 hover:bg-success/25 active:scale-95 px-3 py-2 rounded-lg inline-flex items-center gap-1.5 text-xs font-semibold flex-shrink-0 transition-all"
+                  >
+                    <Icon name={copiedKey === trialResult.key ? 'check' : 'copy'} className="w-3.5 h-3.5" />
+                    {copiedKey === trialResult.key ? 'Copied' : 'Copy'}
+                  </button>
+                </div>
+                <p className="text-text-muted text-[10px] mt-2 px-1 inline-flex items-center gap-1">
+                  <Icon name="info" className="w-3 h-3" /> Save this key — it won't be shown again
+                </p>
+              </div>
+            </div>
+
+            <div className="px-5 sm:px-7 pb-5 sm:pb-6 pt-1 border-t border-border/60 bg-surface/40">
+              <button
+                onClick={() => setTrialResult(null)}
+                className="btn-accent w-full py-3 rounded-xl text-sm font-semibold mt-4"
+              >
+                <Icon name="check" className="w-4 h-4" /> Done
+              </button>
+            </div>
           </div>
         </div>
       )}
