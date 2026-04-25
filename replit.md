@@ -65,6 +65,12 @@ A PostgreSQL database is provisioned (env: `DATABASE_URL`, `PGHOST`,
 
 ## Recent changes
 
+- 2026-04-25: Applied user-uploaded source updates across all pages
+  (`HomePage`, `GamesPage`, `GameDetailPage`, `LoginPage`, `Navbar`,
+  `ProfilePage`, `AdminPanel`), context (`AppContext`), data layer
+  (`store/db.ts`) and styles (`index.css`). Replit-specific config
+  (vite server host/port/allowedHosts, `tsc --noEmit` in build,
+  Node engine pin) was preserved. `tsc --noEmit` passes cleanly.
 - 2026-04-25: Provisioned PostgreSQL database.
 - 2026-04-25: Added Vercel build config (`vercel.json`, `.vercelignore`),
   `.gitignore`, Node engine pin, and `tsc --noEmit` in the build script.
