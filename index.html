@@ -1731,7 +1731,7 @@
             left: 50%;
             transform: translateX(-50%);
             font-family: var(--font-main);
-            font-size: 1.5rem;
+            font-size: clamp(1.8rem, 5vw, 2.8rem);
             font-weight: 400;
             background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
             -webkit-background-clip: text;
@@ -1744,15 +1744,15 @@
 
         @media (max-width: 768px) {
             .nav-center-title {
-                font-size: 1.2rem;
-                letter-spacing: 1px;
+                font-size: clamp(1.5rem, 6vw, 2.2rem);
+                letter-spacing: 1.5px;
             }
         }
 
         @media (max-width: 380px) {
             .nav-center-title {
-                font-size: 1rem;
-                letter-spacing: 0.5px;
+                font-size: clamp(1.2rem, 5vw, 1.8rem);
+                letter-spacing: 1px;
             }
         }
 </style>
