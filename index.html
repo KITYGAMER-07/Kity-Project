@@ -156,18 +156,23 @@
             font-family: var(--font-main);
             font-size: 1.8rem;
             font-weight: 400;
-            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
             text-decoration: none;
             letter-spacing: 1px;
-            animation: logoGlow 3s ease-in-out infinite alternate;
+            display: flex;
+            align-items: center;
         }
 
-        @keyframes logoGlow {
-            from { filter: drop-shadow(0 0 5px rgba(0, 243, 255, 0.5)); }
-            to { filter: drop-shadow(0 0 20px rgba(188, 19, 254, 0.8)); }
+        .nav-logo img {
+            height: 40px;
+            width: auto;
+            display: block;
+            border-radius: 8px;
+            border: 2px solid rgba(0, 243, 255, 0.5);
+            transition: border-color 0.3s ease;
+        }
+
+        .nav-logo img:hover {
+            border-color: var(--neon-blue);
         }
 
         .nav-links {
@@ -1594,7 +1599,7 @@
     <!-- Navigation -->
     <nav class="navbar" id="navbar">
         <div class="nav-container">
-            <a href="#" class="nav-logo"><img src="logo.jpg" alt="KITYGAMER Logo" style="height: 40px; width: auto; display: block; border-radius: 8px;" onerror="this.style.display='none'; this.parentElement.textContent='KITYGAMER'; this.parentElement.style.background='linear-gradient(135deg, var(--neon-blue), var(--neon-purple))'; this.parentElement.style.webkitBackgroundClip='text'; this.parentElement.style.webkitTextFillColor='transparent'; this.parentElement.style.backgroundClip='text';"></a>
+            <a href="#" class="nav-logo"><img src="logo.jpg" alt="KITYGAMER Logo" onerror="this.parentElement.textContent='KITYGAMER'; this.parentElement.style.background='linear-gradient(135deg, var(--neon-blue), var(--neon-purple))'; this.parentElement.style.webkitBackgroundClip='text'; this.parentElement.style.webkitTextFillColor='transparent'; this.parentElement.style.backgroundClip='text';"></a>
             <ul class="nav-links" id="navLinks">
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
