@@ -134,6 +134,16 @@
             box-shadow: 0 0 30px rgba(0, 243, 255, 0.1);
         }
 
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0.7rem 1rem;
+            }
+
+            .nav-container {
+                padding: 0;
+            }
+        }
+
         .nav-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -219,6 +229,38 @@
             position: relative;
         }
 
+        @media (max-width: 768px) {
+            .hero {
+                min-height: auto;
+                padding: 3rem 1rem 1.5rem;
+                display: block;
+            }
+
+            .hero-content {
+                padding-top: 0;
+                margin-top: 0;
+            }
+
+            .hero-badge {
+                margin-bottom: 0.3rem !important;
+            }
+
+            .hero-title {
+                margin-bottom: 0 !important;
+                font-size: 3rem;
+            }
+
+            .hero-subtitle {
+                margin-bottom: 0.2rem !important;
+                font-size: 1.5rem;
+            }
+
+            .hero-tagline {
+                margin-bottom: 0.8rem !important;
+                font-size: 0.95rem;
+            }
+        }
+
         .hero-content {
             max-width: 800px;
             z-index: 1;
@@ -242,9 +284,9 @@
 
         @media (max-width: 768px) {
             .hero-badge {
-                margin-bottom: 1rem;
-                font-size: 0.85rem;
-                padding: 0.4rem 1.2rem;
+                margin-bottom: 0.4rem;
+                font-size: 0.75rem;
+                padding: 0.25rem 0.9rem;
             }
         }
 
@@ -257,8 +299,8 @@
             font-family: var(--font-main);
             font-size: clamp(3.5rem, 12vw, 7rem);
             font-weight: 400;
-            line-height: 1.1;
-            margin-bottom: 1rem;
+            line-height: 1;
+            margin-bottom: 0.2rem;
             background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple), var(--neon-pink));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -277,17 +319,39 @@
             font-size: clamp(1.8rem, 6vw, 3rem);
             font-weight: 400;
             color: var(--text-secondary);
-            margin-bottom: 1rem;
+            margin-bottom: 0.2rem;
             letter-spacing: 2px;
         }
 
         .hero-tagline {
             font-size: 1.3rem;
             color: var(--text-muted);
-            margin-bottom: 2.5rem;
+            margin-bottom: 1rem;
             font-weight: 400;
             font-family: var(--font-main);
             letter-spacing: 1px;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                margin-bottom: 0.1rem;
+                line-height: 1;
+                font-size: clamp(2.5rem, 10vw, 4rem);
+            }
+
+            .hero-subtitle {
+                margin-bottom: 0.1rem;
+                font-size: clamp(1.2rem, 5vw, 2rem);
+            }
+
+            .hero-tagline {
+                margin-bottom: 0.8rem;
+                font-size: 1rem;
+            }
+
+            .hero-content {
+                padding: 0 1rem;
+            }
         }
 
         .btn {
@@ -350,19 +414,25 @@
 
         .scroll-indicator {
             position: absolute;
-            bottom: 2rem;
+            bottom: 1rem;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.3rem;
             color: var(--text-muted);
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             letter-spacing: 2px;
             animation: bounce 2s infinite;
             font-family: var(--font-main);
             pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+            .scroll-indicator {
+                display: none;
+            }
         }
 
         .scroll-indicator span {
@@ -1364,7 +1434,7 @@
             }
 
             .hero {
-                padding: 5rem 1rem 3rem;
+                padding: 5rem 1rem 2rem;
             }
 
             .bot-buttons {
@@ -1580,7 +1650,7 @@
                     <p>My mission is to deliver top-tier services with complete customer satisfaction. Whether you need advanced gaming tools, account services, or digital solutions, KITYGAMER ensures quality and professionalism at every step.</p>
                     <div class="about-stats">
                         <div class="stat-item">
-                            <div class="stat-number">500+</div>
+                            <div class="stat-number">2500+</div>
                             <div class="stat-label">Happy Clients</div>
                         </div>
                         <div class="stat-item">
