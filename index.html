@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KITYGAMER - Premium BGMI Hacks and Digital Services. Fast, reliable, and professional gaming services.">
+    <meta name="keywords" content="KITYGAMER, BGMI, gaming, hacks, digital services, premium">
+    <meta name="author" content="KITYGAMER">
+    <title>KITYGAMER | Premium Digital Services</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.cdnfonts.com/css/hey-comic" rel="stylesheet">
+    <style>
+        :root {
+            --neon-blue: #00f3ff;
+            --neon-purple: #bc13fe;
+            --neon-pink: #ff00ff;
+            --dark-bg: #0a0a0f;
+            --darker-bg: #050508;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --text-muted: #606070;
+            --font-main: 'Hey Comic', 'Comic Sans MS', 'Chalkboard SE', cursive;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+            letter-spacing: 0.5px;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: var(--dark-bg);
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(0, 243, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(188, 19, 254, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(255, 0, 255, 0.03) 0%, transparent 50%);
+            animation: bgPulse 15s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(5deg); }
+        }
+
+        /* Grid Lines */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: 
+                linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+        }
+
+        /* Floating Particles */
+        .particle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: var(--neon-blue);
+            border-radius: 16px;
+            opacity: 0.6;
+            animation: float 20s infinite linear;
+            z-index: -1;
+            box-shadow: 0 0 10px var(--neon-blue);
+            pointer-events: none;
+        }
+
+        .particle:nth-child(2n) { background: var(--neon-purple); box-shadow: 0 0 10px var(--neon-purple); }
+        .particle:nth-child(3n) { background: var(--neon-pink); box-shadow: 0 0 10px var(--neon-pink); }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-10vh) translateX(100px); opacity: 0; }
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1rem 2rem;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            background: rgba(10, 10, 15, 0.8);
+            border-bottom: 1px solid var(--card-border);
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            padding: 0.6rem 2rem;
+            background: rgba(10, 10, 15, 0.95);
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: var(--font-main);
+            font-size: 1.8rem;
+            font-weight: 400;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+            letter-spacing: 1px;
+            animation: logoGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes logoGlow {
+            from { filter: drop-shadow(0 0 5px rgba(0, 243, 255, 0.5)); }
+            to { filter: drop-shadow(0 0 20px rgba(188, 19, 254, 0.8)); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 400;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            position: relative;
+            transition: color 0.3s ease;
+            text-transform: uppercase;
+            font-family: var(--font-main);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--neon-blue);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--neon-blue);
+            font-size: 1.5rem;
+            cursor: pointer;
+            font-family: var(--font-main);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 6rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: rgba(0, 243, 255, 0.1);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            border-radius: 50px;
+            color: var(--neon-blue);
+            font-weight: 400;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            animation: badgePulse 2s ease-in-out infinite;
+            font-family: var(--font-main);
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(0, 243, 255, 0.3); }
+            50% { box-shadow: 0 0 25px rgba(0, 243, 255, 0.6); }
+        }
+
+        .hero-title {
+            font-family: var(--font-main);
+            font-size: clamp(3.5rem, 12vw, 7rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleGlow 3s ease-in-out infinite alternate;
+            letter-spacing: 2px;
+        }
+
+        @keyframes titleGlow {
+            from { filter: drop-shadow(0 0 20px rgba(0, 243, 255, 0.5)); }
+            to { filter: drop-shadow(0 0 40px rgba(188, 19, 254, 0.8)); }
+        }
+
+        .hero-subtitle {
+            font-family: var(--font-main);
+            font-size: clamp(1.8rem, 6vw, 3rem);
+            font-weight: 400;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .hero-tagline {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            font-weight: 400;
+            font-family: var(--font-main);
+            letter-spacing: 1px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2.5rem;
+            font-family: var(--font-main);
+            font-size: 1.1rem;
+            font-weight: 400;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            color: var(--dark-bg);
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(0, 243, 255, 0.6), 0 0 60px rgba(188, 19, 254, 0.4);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+            pointer-events: none;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--neon-blue);
+            border: 2px solid var(--neon-blue);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+        }
+
+        .btn-outline:hover {
+            background: rgba(0, 243, 255, 0.1);
+            box-shadow: 0 0 40px rgba(0, 243, 255, 0.4);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            animation: bounce 2s infinite;
+            font-family: var(--font-main);
+            pointer-events: none;
+        }
+
+        .scroll-indicator span {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--neon-blue), transparent);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* Section Styles */
+        section {
+            padding: 6rem 2rem;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            color: var(--neon-blue);
+            font-weight: 400;
+            font-size: 1rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            font-family: var(--font-main);
+        }
+
+        .section-title {
+            font-family: var(--font-main);
+            font-size: clamp(2.2rem, 7vw, 4rem);
+            font-weight: 400;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .section-title span {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-desc {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            font-family: var(--font-main);
+            letter-spacing: 0.5px;
+        }
+
+        /* Glassmorphism Card */
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(0, 243, 255, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 243, 255, 0.15), 0 0 30px rgba(188, 19, 254, 0.1);
+        }
+
+        /* ============================================
+           ABOUT SECTION - Who is KITYGAMER?
+           ============================================ */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-image {
+            position: relative;
+        }
+
+        .about-image-wrapper {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(0, 243, 255, 0.1), rgba(188, 19, 254, 0.1));
+            border: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 2rem;
+            min-height: 300px;
+        }
+
+        .about-image-wrapper.no-image::after {
+            content: '🎮 KITYGAMER';
+            position: absolute;
+            color: var(--neon-blue);
+            font-size: 1.5rem;
+            font-family: var(--font-main);
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        .about-image-wrapper::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            border-radius: 22px;
+            z-index: -1;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .about-logo-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .about-content h3 {
+            font-family: var(--font-main);
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: 2px;
+            font-weight: 400;
+        }
+
+        .about-content p {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-family: var(--font-main);
+            letter-spacing: 0.5px;
+        }
+
+        .about-stats {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: var(--font-main);
+            font-size: 2.5rem;
+            font-weight: 400;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 1px;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: var(--font-main);
+        }
+
+        /* ============================================
+           SERVICES SECTION
+           ============================================ */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            text-align: center;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(0, 243, 255, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 243, 255, 0.15), 0 0 30px rgba(188, 19, 254, 0.1);
+        }
+
+        .service-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 1.5rem;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(0, 243, 255, 0.15), rgba(188, 19, 254, 0.15));
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .service-icon svg {
+            width: 32px;
+            height: 32px;
+            stroke: var(--neon-blue);
+            fill: none;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .service-card h3 {
+            font-family: var(--font-main);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+            letter-spacing: 1px;
+            font-weight: 400;
+        }
+
+        .service-card p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            position: relative;
+            z-index: 1;
+            font-family: var(--font-main);
+            letter-spacing: 0.5px;
+        }
+
+        /* ============================================
+           WHY CHOOSE SECTION
+           ============================================ */
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .why-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .why-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(0, 243, 255, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 243, 255, 0.15), 0 0 30px rgba(188, 19, 254, 0.1);
+        }
+
+        .why-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.4);
+            position: relative;
+            z-index: 1;
+        }
+
+        .why-icon svg {
+            width: 28px;
+            height: 28px;
+            stroke: #fff;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .why-card h3 {
+            font-family: var(--font-main);
+            font-size: 1.6rem;
+            margin-bottom: 0.8rem;
+            position: relative;
+            z-index: 1;
+            letter-spacing: 1px;
+            font-weight: 400;
+        }
+
+        .why-card p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            position: relative;
+            z-index: 1;
+            font-family: var(--font-main);
+            letter-spacing: 0.5px;
+        }
+
+        /* ============================================
+           BOT SECTION - Meet KITY Bot
+           ============================================ */
+        .bot-section {
+            padding: 6rem 2rem;
+            position: relative;
+        }
+
+        .bot-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .bot-image {
+            position: relative;
+            order: 2; /* Image on the right side */
+        }
+
+        .bot-image-wrapper {
+            width: 100%;
+            max-width: 400px;
+            aspect-ratio: 1;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(0, 243, 255, 0.1), rgba(188, 19, 254, 0.1));
+            border: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 2rem;
+            margin: 0 auto;
+            min-height: 300px;
+        }
+
+        .bot-image-wrapper.no-image::after {
+            content: '🤖 KITY Bot';
+            position: absolute;
+            color: var(--neon-blue);
+            font-size: 1.5rem;
+            font-family: var(--font-main);
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        .bot-image-wrapper::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            border-radius: 22px;
+            z-index: -1;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .bot-logo-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .bot-content {
+            order: 1; /* Text on the left side */
+        }
+
+        .bot-content h3 {
+            font-family: var(--font-main);
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: 2px;
+            font-weight: 400;
+        }
+
+        .bot-content p {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-family: var(--font-main);
+            letter-spacing: 0.5px;
+        }
+
+        .bot-badge {
+            display: inline-block;
+            padding: 0.4rem 1.2rem;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 50px;
+            color: #00ff88;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            font-family: var(--font-main);
+            animation: onlinePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes onlinePulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 136, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(0, 255, 136, 0.6); }
+        }
+
+        .bot-username {
+            color: var(--neon-blue);
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            font-family: var(--font-main);
+            letter-spacing: 1px;
+        }
+
+        .bot-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        /* ============================================
+           CONTACT SECTION
+           ============================================ */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .contact-info h3 {
+            font-family: var(--font-main);
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: 2px;
+            font-weight: 400;
+        }
+
+        .contact-info p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+            font-family: var(--font-main);
+            font-size: 1.15rem;
+            letter-spacing: 0.5px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-item:hover {
+            border-color: rgba(0, 243, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.1);
+        }
+
+        .contact-item-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(0, 243, 255, 0.15), rgba(188, 19, 254, 0.15));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-item-icon svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--neon-blue);
+            fill: none;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .contact-item-info h4 {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 0.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: var(--font-main);
+        }
+
+        .contact-item-info a, .contact-item-info span {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 400;
+            font-size: 1.2rem;
+            font-family: var(--font-main);
+            letter-spacing: 0.5px;
+        }
+
+        .contact-item-info a:hover {
+            color: var(--neon-blue);
+        }
+
+        /* Contact Form */
+        .contact-form-card {
+            background: rgba(15, 15, 25, 0.95);
+            border: 2px solid rgba(0, 243, 255, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .contact-form-card:hover {
+            border-color: rgba(0, 243, 255, 0.4);
+            box-shadow: 0 0 40px rgba(0, 243, 255, 0.15);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: var(--font-main);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            background: #1a1a2e;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            color: #ffffff;
+            font-family: var(--font-main);
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            display: block;
+            -webkit-appearance: none;
+            appearance: none;
+            outline: none;
+            cursor: text;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+            background: #1f1f35;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #555570;
+            font-family: var(--font-main);
+            letter-spacing: 0.5px;
+            opacity: 1;
+        }
+
+        .send-status {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+            font-family: var(--font-main);
+            font-size: 1.1rem;
+            display: none;
+            letter-spacing: 0.5px;
+        }
+
+        .send-status.success {
+            display: block;
+            background: rgba(0, 243, 255, 0.1);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            color: var(--neon-blue);
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        .footer {
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 1px solid var(--card-border);
+            background: var(--darker-bg);
+        }
+
+        .footer-logo {
+            font-family: var(--font-main);
+            font-size: 2.5rem;
+            font-weight: 400;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            display: inline-block;
+            letter-spacing: 2px;
+        }
+
+        .footer p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            font-family: var(--font-main);
+            letter-spacing: 0.5px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 1.5rem 0;
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 400;
+            transition: color 0.3s ease;
+            font-family: var(--font-main);
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-links a:hover {
+            color: var(--neon-blue);
+        }
+
+        /* ============================================
+           ANIMATIONS
+           ============================================ */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.3s; }
+        .delay-4 { transition-delay: 0.4s; }
+
+        /* Divider */
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--neon-blue), var(--neon-purple), transparent);
+            margin: 0 auto;
+            max-width: 200px;
+            opacity: 0.5;
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                flex-direction: column;
+                background: rgba(10, 10, 15, 0.98);
+                padding: 1.5rem;
+                gap: 1rem;
+                border-bottom: 1px solid var(--card-border);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .about-grid,
+            .bot-grid,
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .bot-image {
+                order: 1;
+            }
+
+            .bot-content {
+                order: 2;
+            }
+
+            .about-stats {
+                justify-content: center;
+            }
+
+            section {
+                padding: 4rem 1.5rem;
+            }
+
+            .hero {
+                padding: 5rem 1.5rem 3rem;
+            }
+
+            .bot-buttons {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .services-grid,
+            .why-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .about-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--darker-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, var(--neon-blue), var(--neon-purple));
+            border-radius: 4px;
+        }
+
+        /* Selection */
+        ::selection {
+            background: rgba(0, 243, 255, 0.3);
+            color: var(--text-primary);
+        }
+    </style>
+<base target="_blank">
+<base target="_blank">
+</head>
+<body>
+    <!-- Background Effects -->
+    <div class="bg-animation"></div>
+    <div class="grid-overlay"></div>
+
+    <!-- Floating Particles -->
+    <div class="particle" style="left: 10%; animation-delay: 0s; animation-duration: 18s;"></div>
+    <div class="particle" style="left: 20%; animation-delay: 2s; animation-duration: 22s;"></div>
+    <div class="particle" style="left: 35%; animation-delay: 4s; animation-duration: 20s;"></div>
+    <div class="particle" style="left: 50%; animation-delay: 1s; animation-duration: 25s;"></div>
+    <div class="particle" style="left: 65%; animation-delay: 3s; animation-duration: 19s;"></div>
+    <div class="particle" style="left: 80%; animation-delay: 5s; animation-duration: 21s;"></div>
+    <div class="particle" style="left: 90%; animation-delay: 2.5s; animation-duration: 23s;"></div>
+    <div class="particle" style="left: 15%; animation-delay: 6s; animation-duration: 17s;"></div>
+    <div class="particle" style="left: 45%; animation-delay: 7s; animation-duration: 24s;"></div>
+    <div class="particle" style="left: 75%; animation-delay: 1.5s; animation-duration: 20s;"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">KITYGAMER</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#why">Why Us</a></li>
+                <li><a href="#bot">Bot</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle Menu">☰</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-badge fade-in">Welcome to the Future</div>
+            <h1 class="hero-title fade-in delay-1">KITYGAMER</h1>
+            <h2 class="hero-subtitle fade-in delay-2">BGMI HACKS</h2>
+            <p class="hero-tagline fade-in delay-3">Premium Digital Services</p>
+            <a href="https://t.me/KITYGAMER" target="_blank" class="btn btn-primary fade-in delay-4">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21.198 2.433a2.242 2.242 0 0 0-1.022.215l-16.5 6.6a2.25 2.25 0 0 0-.106 4.168l3.9 1.3a1.5 1.5 0 0 1 .75.75l1.3 3.9a2.25 2.25 0 0 0 4.168.106l6.6-16.5a2.242 2.242 0 0 0-1.59-3.559z"/>
+                    <path d="m9.5 14.5 5-5"/>
+                </svg>
+                Contact on Telegram
+            </a>
+        </div>
+        <div class="scroll-indicator">
+            <span></span>
+            SCROLL
+        </div>
+    </section>
+
+    <!-- ============================================
+         ABOUT SECTION - Who is KITYGAMER?
+         ============================================ -->
+    <section id="about">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-label">About Me</span>
+                <h2 class="section-title">Who is <span>KITYGAMER</span>?</h2>
+                <p class="section-desc">Your trusted partner for premium digital gaming services</p>
+            </div>
+            <div class="about-grid">
+                <!-- Image on the Left -->
+                <div class="about-image fade-in">
+                    <div class="about-image-wrapper">
+                        <img src="logo.jpg" alt="KITYGAMER Logo" class="about-logo-img" onerror="this.style.display='none'; this.parentElement.classList.add('no-image');">
+                    </div>
+                </div>
+                <!-- Text on the Right -->
+                <div class="about-content fade-in delay-2">
+                    <h3>Professional Gaming Expert</h3>
+                    <p>Welcome to KITYGAMER — your one-stop destination for premium BGMI hacks and digital gaming services. With years of experience in the gaming industry, I provide reliable, fast, and secure solutions tailored to enhance your gaming experience.</p>
+                    <p>My mission is to deliver top-tier services with complete customer satisfaction. Whether you need advanced gaming tools, account services, or digital solutions, KITYGAMER ensures quality and professionalism at every step.</p>
+                    <div class="about-stats">
+                        <div class="stat-item">
+                            <div class="stat-number">500+</div>
+                            <div class="stat-label">Happy Clients</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">99%</div>
+                            <div class="stat-label">Success Rate</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">24/7</div>
+                            <div class="stat-label">Support</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- Services Section -->
+    <section id="services">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-label">What I Offer</span>
+                <h2 class="section-title">My <span>Services</span></h2>
+                <p class="section-desc">Premium digital solutions crafted for gamers</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card fade-in">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24"><path d="M6 11h4M6 15h4m-4-8h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/><path d="M12 7v10m4-8v6"/></svg>
+                    </div>
+                    <h3>BGMI Hacks</h3>
+                    <p>Advanced and undetectable BGMI hacking tools with regular updates, anti-ban protection, and smooth gameplay enhancement features.</p>
+                </div>
+                <div class="service-card fade-in delay-1">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><path d="M12 6v6l4 2"/></svg>
+                    </div>
+                    <h3>Account Services</h3>
+                    <p>Professional account boosting, recovery, and management services. Secure handling with guaranteed results and privacy protection.</p>
+                </div>
+                <div class="service-card fade-in delay-2">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                    </div>
+                    <h3>Security Tools</h3>
+                    <p>Top-tier security solutions to protect your gaming accounts. Anti-detect systems and VPN configurations for safe gaming.</p>
+                </div>
+                <div class="service-card fade-in delay-3">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </div>
+                    <h3>Custom Solutions</h3>
+                    <p>Tailored digital services designed specifically for your unique gaming needs. Personalized configurations and dedicated support.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- Why Choose Section -->
+    <section id="why">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-label">Why Choose Me</span>
+                <h2 class="section-title">The <span>KITYGAMER</span> Advantage</h2>
+                <p class="section-desc">What sets me apart from the rest</p>
+            </div>
+            <div class="why-grid">
+                <div class="why-card fade-in">
+                    <div class="why-icon">
+                        <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                    </div>
+                    <h3>Fast Response</h3>
+                    <p>Instant replies and quick service delivery. I value your time and ensure all requests are handled with maximum efficiency.</p>
+                </div>
+                <div class="why-card fade-in delay-1">
+                    <div class="why-icon">
+                        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+                    </div>
+                    <h3>Reliable Service</h3>
+                    <p>Consistent, high-quality results with proven track record. Every service is tested thoroughly before delivery.</p>
+                </div>
+                <div class="why-card fade-in delay-2">
+                    <div class="why-icon">
+                        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    </div>
+                    <h3>Customer Support</h3>
+                    <p>24/7 dedicated support via Telegram. Get help anytime with friendly, professional assistance for all your queries.</p>
+                </div>
+                <div class="why-card fade-in delay-3">
+                    <div class="why-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                    </div>
+                    <h3>Easy Access</h3>
+                    <p>Simple ordering process with clear instructions. No complicated steps — just message me and get started instantly.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ============================================
+         BOT SECTION - Meet KITY Bot
+         ============================================ -->
+    <section class="bot-section" id="bot">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-label">Our Bot</span>
+                <h2 class="section-title">Meet <span>KITY Bot</span></h2>
+                <p class="section-desc">Your 24/7 automated assistant for instant service</p>
+            </div>
+            <div class="bot-grid">
+                <!-- Text on the Left -->
+                <div class="bot-content fade-in">
+                    <div class="bot-badge">Online</div>
+                    <h3>KITY Bot</h3>
+                    <p class="bot-username">@KITYSHOPBOT</p>
+                    <p>Our official Telegram bot is always online to help you! Get instant price quotes, service details, and automated support anytime. Just start a chat and type your request — the bot will guide you through everything.</p>
+                    <p>Whether you need quick information about our services, pricing details, or want to place an order, KITY Bot handles it all instantly without waiting.</p>
+                    <div class="bot-buttons">
+                        <a href="https://t.me/KITYSHOPBOT" target="_blank" class="btn btn-primary">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21.198 2.433a2.242 2.242 0 0 0-1.022.215l-16.5 6.6a2.25 2.25 0 0 0-.106 4.168l3.9 1.3a1.5 1.5 0 0 1 .75.75l1.3 3.9a2.25 2.25 0 0 0 4.168.106l6.6-16.5a2.242 2.242 0 0 0-1.59-3.559z"/>
+                                <path d="m9.5 14.5 5-5"/>
+                            </svg>
+                            Start Chat
+                        </a>
+                        <a href="https://t.me/KITYGAMER" target="_blank" class="btn btn-outline">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                            Support
+                        </a>
+                    </div>
+                </div>
+                <!-- Image on the Right -->
+                <div class="bot-image fade-in delay-2">
+                    <div class="bot-image-wrapper">
+                        <img src="logo1.jpg.jpeg" alt="KITY Bot Profile" class="bot-logo-img" onerror="this.style.display='none'; this.parentElement.classList.add('no-image');">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-label">Get In Touch</span>
+                <h2 class="section-title">Contact <span>Me</span></h2>
+                <p class="section-desc">Ready to level up? Let's connect</p>
+            </div>
+            <div class="contact-grid">
+                <div class="contact-info fade-in">
+                    <h3>Let's Work Together</h3>
+                    <p>Have questions or ready to get started? Reach out through Telegram for the fastest response. I'm always online and ready to help you with your gaming needs.</p>
+
+                    <div class="contact-item">
+                        <div class="contact-item-icon">
+                            <svg viewBox="0 0 24 24"><path d="M21.198 2.433a2.242 2.242 0 0 0-1.022.215l-16.5 6.6a2.25 2.25 0 0 0-.106 4.168l3.9 1.3a1.5 1.5 0 0 1 .75.75l1.3 3.9a2.25 2.25 0 0 0 4.168.106l6.6-16.5a2.242 2.242 0 0 0-1.59-3.559z"/><path d="m9.5 14.5 5-5"/></svg>
+                        </div>
+                        <div class="contact-item-info">
+                            <h4>Telegram</h4>
+                            <a href="https://t.me/KITYGAMER" target="_blank">@KITYGAMER</a>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-item-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 6v6l4 2"/></svg>
+                        </div>
+                        <div class="contact-item-info">
+                            <h4>Availability</h4>
+                            <span>24/7 Online Support</span>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-item-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><path d="M2 12h2m16 0h2M12 2v2m0 16v2"/></svg>
+                        </div>
+                        <div class="contact-item-info">
+                            <h4>Location</h4>
+                            <span>Global Digital Services</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-form-card fade-in delay-2">
+                    <form id="contactForm" onsubmit="handleSubmit(event)">
+                        <div class="form-group">
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" name="name" placeholder="Enter your name" required autocomplete="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" placeholder="Enter your email" required autocomplete="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject" placeholder="What do you need help with?" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" placeholder="Describe your requirements..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;" id="sendBtn">
+                            Send Message
+                        </button>
+                        <div class="send-status" id="sendStatus"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-logo">KITYGAMER</div>
+        <ul class="footer-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#bot">Bot</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <p>&copy; 2026 KITYGAMER. All Rights Reserved.</p>
+        <p style="margin-top: 0.5rem; font-size: 1rem;">Premium Digital Services for Gamers</p>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileMenuBtn.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+        });
+
+        // Close mobile menu on link click
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileMenuBtn.textContent = '☰';
+            });
+        });
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Contact Form Handler - Direct Telegram Send
+        function handleSubmit(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const subject = document.getElementById('subject').value.trim();
+            const message = document.getElementById('message').value.trim();
+            const sendBtn = document.getElementById('sendBtn');
+            const sendStatus = document.getElementById('sendStatus');
+
+            if (!name || !email || !subject || !message) {
+                sendStatus.textContent = 'Please fill all fields!';
+                sendStatus.className = 'send-status success';
+                sendStatus.style.color = '#ff4444';
+                sendStatus.style.borderColor = 'rgba(255, 68, 68, 0.3)';
+                sendStatus.style.background = 'rgba(255, 68, 68, 0.1)';
+                return;
+            }
+
+            // Build Telegram message
+            const telegramText = `New Message from KITYGAMER Website%0A%0AName: ${encodeURIComponent(name)}%0AEmail: ${encodeURIComponent(email)}%0ASubject: ${encodeURIComponent(subject)}%0AMessage: ${encodeURIComponent(message)}`;
+
+            // Telegram deep link
+            const telegramURL = `https://t.me/KITYGAMER?text=${telegramText}`;
+
+            // Show sending status
+            sendBtn.innerHTML = 'Opening Telegram...';
+            sendBtn.disabled = true;
+
+            sendStatus.textContent = 'Opening Telegram to send your message to @KITYGAMER...';
+            sendStatus.className = 'send-status success';
+            sendStatus.style.color = 'var(--neon-blue)';
+            sendStatus.style.borderColor = 'rgba(0, 243, 255, 0.3)';
+            sendStatus.style.background = 'rgba(0, 243, 255, 0.1)';
+
+            setTimeout(() => {
+                window.location.href = telegramURL;
+
+                setTimeout(() => {
+                    sendBtn.innerHTML = 'Send Message';
+                    sendBtn.disabled = false;
+                    document.getElementById('contactForm').reset();
+                    sendStatus.textContent = 'Message ready! Press Send in Telegram to complete.';
+                }, 2000);
+            }, 800);
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add parallax effect to particles on mouse move
+        document.addEventListener('mousemove', (e) => {
+            const particles = document.querySelectorAll('.particle');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+
+            particles.forEach((particle, index) => {
+                const speed = (index + 1) * 0.5;
+                const xOffset = (x - 0.5) * speed * 20;
+                const yOffset = (y - 0.5) * speed * 20;
+                particle.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+            });
+        });
+
+        // Image debug logging
+        document.querySelectorAll('.bot-logo-img, .about-logo-img').forEach(img => {
+            img.addEventListener('error', function() {
+                console.error('❌ Image failed to load:', this.src);
+                console.log('💡 Check: Is the file in the same folder? Is the spelling exact? Is the extension .jpg?');
+            });
+            img.addEventListener('load', function() {
+                console.log('✅ Image loaded successfully:', this.src);
+            });
+        });
+    </script>
+</body>
+</html>
