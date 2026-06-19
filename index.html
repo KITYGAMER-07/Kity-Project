@@ -356,13 +356,19 @@
         @media (max-width: 768px) {
             .hero {
                 min-height: auto;
-                padding: 5rem 1rem 0.5rem;
-                display: block;
+                padding: 3.5rem 1rem 0.5rem;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
             }
 
             .hero-content {
-                padding-top: 1rem;
+                padding-top: 0;
                 margin-top: 0;
+                width: 100%;
+                margin: 0 auto;
+                text-align: center;
             }
 
             .hero-badge {
@@ -405,6 +411,9 @@
 
         .hero-content {
             max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            text-align: center;
             z-index: 1;
         }
 
@@ -426,7 +435,8 @@
 
         @media (max-width: 768px) {
             .hero-badge {
-                margin-bottom: 0.4rem;
+                margin-bottom: 0.3rem;
+                margin-top: 0.5rem;
                 font-size: 0.75rem;
                 padding: 0.25rem 0.9rem;
             }
@@ -449,6 +459,8 @@
             background-clip: text;
             animation: titleGlow 3s ease-in-out infinite alternate;
             letter-spacing: 2px;
+            text-align: center;
+            width: 100%;
         }
 
         @keyframes titleGlow {
@@ -463,6 +475,8 @@
             color: var(--text-secondary);
             margin-bottom: 0.2rem;
             letter-spacing: 2px;
+            text-align: center;
+            width: 100%;
         }
 
         .hero-tagline {
@@ -472,11 +486,14 @@
             font-weight: 400;
             font-family: var(--font-main);
             letter-spacing: 1px;
+            text-align: center;
+            width: 100%;
         }
 
         @media (max-width: 768px) {
             .hero-title {
                 margin-bottom: 0.1rem;
+                margin-top: 0;
                 line-height: 1;
                 font-size: clamp(2.5rem, 10vw, 4rem);
             }
@@ -1710,6 +1727,7 @@
             color: var(--text-primary);
         }
     </style>
+<base target="_blank">
 <base target="_blank">
 <base target="_blank">
 <base target="_blank">
