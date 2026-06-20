@@ -694,7 +694,8 @@
             aspect-ratio: 1;
             border-radius: 20px;
             background: linear-gradient(135deg, rgba(0, 243, 255, 0.1), rgba(188, 19, 254, 0.1));
-            border: 1px solid var(--card-border);
+            border: 3px solid rgba(0, 243, 255, 0.4);
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.2), 0 0 60px rgba(188, 19, 254, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -702,6 +703,12 @@
             overflow: hidden;
             padding: 2rem;
             min-height: 300px;
+            transition: all 0.4s ease;
+        }
+
+        .about-image-wrapper:hover {
+            border-color: rgba(0, 243, 255, 0.7);
+            box-shadow: 0 0 40px rgba(0, 243, 255, 0.35), 0 0 80px rgba(188, 19, 254, 0.2);
         }
 
         .about-image-wrapper.no-image::after {
@@ -950,7 +957,8 @@
             aspect-ratio: 1;
             border-radius: 20px;
             background: linear-gradient(135deg, rgba(0, 243, 255, 0.1), rgba(188, 19, 254, 0.1));
-            border: 1px solid var(--card-border);
+            border: 3px solid rgba(0, 243, 255, 0.4);
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.2), 0 0 60px rgba(188, 19, 254, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -959,6 +967,12 @@
             padding: 2rem;
             margin: 0 auto;
             min-height: 300px;
+            transition: all 0.4s ease;
+        }
+
+        .bot-image-wrapper:hover {
+            border-color: rgba(0, 243, 255, 0.7);
+            box-shadow: 0 0 40px rgba(0, 243, 255, 0.35), 0 0 80px rgba(188, 19, 254, 0.2);
         }
 
         .bot-image-wrapper.no-image::after {
@@ -1815,48 +1829,7 @@
         </div>
     </section>
 
-    <!-- ============================================
-         ABOUT SECTION - Who is KITYGAMER?
-         ============================================ -->
-    <section id="about">
-        <div class="container">
-            <div class="section-header fade-in">
-                <span class="section-label">About Me</span>
-                <h2 class="section-title">Who is <span>KITYGAMER</span>?</h2>
-                <p class="section-desc">Your trusted partner for premium digital gaming services</p>
-            </div>
-            <div class="about-grid">
-                <!-- Image on the Left -->
-                <div class="about-image fade-in">
-                    <div class="about-image-wrapper">
-                        <img src="logo.jpg" alt="KITYGAMER Logo" class="about-logo-img" onerror="this.style.display='none'; this.parentElement.classList.add('no-image');">
-                    </div>
-                </div>
-                <!-- Text on the Right -->
-                <div class="about-content fade-in delay-2">
-                    <h3>Professional Gaming Expert</h3>
-                    <p>Welcome to KITYGAMER — your one-stop destination for premium BGMI hacks and digital gaming services. With years of experience in the gaming industry, I provide reliable, fast, and secure solutions tailored to enhance your gaming experience.</p>
-                    <p>My mission is to deliver top-tier services with complete customer satisfaction. Whether you need advanced gaming tools, account services, or digital solutions, KITYGAMER ensures quality and professionalism at every step.</p>
-                    <div class="about-stats">
-                        <div class="stat-item">
-                            <div class="stat-number">2500+</div>
-                            <div class="stat-label">Happy Clients</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">99%</div>
-                            <div class="stat-label">Success Rate</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">24/7</div>
-                            <div class="stat-label">Support</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <div class="section-divider"></div>
+    
 
 <section id="novaesp">
         <div class="container">
@@ -2276,6 +2249,50 @@
     </section>
 
     <div class="section-divider"></div>
+
+<!-- ============================================
+         ABOUT SECTION - Who is KITYGAMER?
+         ============================================ -->
+    <section id="about">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-label">About Me</span>
+                <h2 class="section-title">Who is <span>KITYGAMER</span>?</h2>
+                <p class="section-desc">Your trusted partner for premium digital gaming services</p>
+            </div>
+            <div class="about-grid">
+                <!-- Image on the Left -->
+                <div class="about-image fade-in">
+                    <div class="about-image-wrapper">
+                        <img src="logo.jpg" alt="KITYGAMER Logo" class="about-logo-img" onerror="this.style.display='none'; this.parentElement.classList.add('no-image');">
+                    </div>
+                </div>
+                <!-- Text on the Right -->
+                <div class="about-content fade-in delay-2">
+                    <h3>Professional Gaming Expert</h3>
+                    <p>Welcome to KITYGAMER — your one-stop destination for premium BGMI hacks and digital gaming services. With years of experience in the gaming industry, I provide reliable, fast, and secure solutions tailored to enhance your gaming experience.</p>
+                    <p>My mission is to deliver top-tier services with complete customer satisfaction. Whether you need advanced gaming tools, account services, or digital solutions, KITYGAMER ensures quality and professionalism at every step.</p>
+                    <div class="about-stats">
+                        <div class="stat-item">
+                            <div class="stat-number">2500+</div>
+                            <div class="stat-label">Happy Clients</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">99%</div>
+                            <div class="stat-label">Success Rate</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">24/7</div>
+                            <div class="stat-label">Support</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
 
     <!-- ============================================
          BOT SECTION - Meet KITY Bot
