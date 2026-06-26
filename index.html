@@ -244,13 +244,7 @@
             }
         }
 
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+
 
         .nav-logo {
             font-family: var(--font-main);
@@ -279,12 +273,13 @@
             color: var(--text-secondary);
             text-decoration: none;
             font-weight: 400;
-            font-size: 1rem;
-            letter-spacing: 1px;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
             position: relative;
             transition: color 0.3s ease;
             text-transform: uppercase;
             font-family: var(--font-main);
+            white-space: nowrap;
         }
 
         .nav-links a::after {
@@ -1565,6 +1560,16 @@
                 box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             }
 
+            .nav-center-title {
+                position: static;
+                transform: none;
+                margin: 0 auto;
+            }
+
+            .nav-container {
+                justify-content: space-between;
+            }
+
             .nav-links.active {
                 display: flex;
             }
@@ -1739,11 +1744,8 @@
             color: var(--text-primary);
         }
             .nav-center-title {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
             font-family: var(--font-main);
-            font-size: clamp(1.8rem, 5vw, 2.8rem);
+            font-size: clamp(1.6rem, 4vw, 2.4rem);
             font-weight: 400;
             background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
             -webkit-background-clip: text;
@@ -1752,22 +1754,47 @@
             letter-spacing: 2px;
             white-space: nowrap;
             z-index: 1;
+            margin: 0 auto;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .nav-container {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            flex-shrink: 0;
+            z-index: 2;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.2rem;
+            list-style: none;
+            flex-shrink: 0;
+            z-index: 2;
         }
 
         @media (max-width: 768px) {
             .nav-center-title {
-                font-size: clamp(1.5rem, 6vw, 2.2rem);
+                font-size: clamp(1.4rem, 5vw, 2rem);
                 letter-spacing: 1.5px;
             }
         }
 
         @media (max-width: 380px) {
             .nav-center-title {
-                font-size: clamp(1.2rem, 5vw, 1.8rem);
+                font-size: clamp(1.1rem, 4vw, 1.6rem);
                 letter-spacing: 1px;
             }
         }
 </style>
+<base target="_blank">
 <base target="_blank">
 <base target="_blank">
 <base target="_blank">
